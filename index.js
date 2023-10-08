@@ -2,18 +2,30 @@ const fs = require("fs");
 const functions = require("./os/nexsys/functions");
 const config = require("./config");
 const colors = require("colors");
-const readline = require("readline");
+const path = require("path");
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const rl = functions.readline;
 let type = 1;
 
-rl.input.on("keypress", (key, data) => {
+module.exports = rl;
+
+rl.input.on("keypress", async (key, data) => {
     if (key == "E" && type == 1) {
         console.clear();
         console.log("Booting NexusOS..");
+    }
+    else if (key == "R" && type == 1) {
+        var accountName;
+        var accountPassword;
+        type = 2;
+
+        console.clear();
+        accountName = await functions.question("Account's Name: ");
+        accountPassword = await functions.question("Account's Password: ");
+
+        console.log("Creating account..");
+        fs.writeFileSync(path.join(__dirname, "os", "users", `${accountName}.nxdata`), `{password:${accountPassword}}`);
+        console.log("Created account!");
     };
 });
 

@@ -1,8 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 const colors = require("colors");
+const readline = require("readline");
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 module.exports = {
+    readline: rl,
     getFolderSize: function (folderPath) {
         let totalSizeInBytes = 0;
 
@@ -68,5 +75,11 @@ module.exports = {
 
     printKeybind: function(keybind, name) {
         return (`(${keybind}) `.black + `${name} `.black).bgWhite
+    },
+
+    question: function(question) {
+        return new Promise((resolve) => {
+            rl.question(question, answer => resolve(answer));
+        });
     }
 };
