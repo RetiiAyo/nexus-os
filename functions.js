@@ -22,7 +22,7 @@ module.exports = {
         return totalSizeInBytes;
     },
 
-    getFolderContent: function(folderPath) {
+    getFolderContent: function (folderPath) {
         const files = fs.readdirSync(folderPath);
         const array = [];
 
@@ -34,7 +34,8 @@ module.exports = {
             array.push({
                 name: file,
                 path: path.join(folderPath, file),
-                type: isFile ? "File" : isDirectory ? "Directory" : "Other"
+                type: isFile ? "File" : isDirectory ? "Directory" : "Other",
+                size: fileStats.size
             });
         });
 
@@ -44,5 +45,23 @@ module.exports = {
     convertBytesToMB: function (bytes) {
         const totalSizeInMB = bytes / (1024 * 1024);
         return totalSizeInMB;
+    },
+
+    printDirectoryStructure: function (directoryPath, indent = "") {
+        const directoryContents = this.getFolderContent(directoryPath);
+
+        directoryContents.forEach((item, index, array) => {
+            const isLastItem = index === array.length - 1;
+            const prefix = isLastItem ? "└── " : "├── ";
+            const itemType = item.type === "File" ? "File" : "Directory";
+            const fileSize = item.type === "File" ? ` (${this.convertBytesToMB(item.size).toFixed(2)} MB)` : '';
+
+            console.log(`${indent}${prefix}${item.name} (${itemType}${fileSize})`);
+
+            if (item.type === "Directory") {
+                const newIndent = isLastItem ? `${indent}    ` : `${indent}│   `;
+                this.printDirectoryStructure(item.path, newIndent);
+            };
+        });
     }
 };
