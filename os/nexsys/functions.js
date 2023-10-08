@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const colors = require("colors");
 
 module.exports = {
     getFolderSize: function (folderPath) {
@@ -63,5 +64,9 @@ module.exports = {
                 this.printDirectoryStructure(item.path, newIndent);
             };
         });
+    },
+
+    printKeybind: function(keybind, name) {
+        return (`(${keybind}) `.black + `${name} `.black).bgWhite
     }
 };
