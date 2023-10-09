@@ -73,13 +73,24 @@ module.exports = {
         });
     },
 
-    printKeybind: function(keybind, name) {
+    printKeybind: function (keybind, name) {
         return (`(${keybind}) `.black + `${name} `.black).bgWhite
     },
 
-    question: function(question) {
+    question: function (question) {
         return new Promise((resolve) => {
             rl.question(question, answer => resolve(answer));
         });
+    },
+
+    printStartup: function (config) {
+        console.log(`OS Version: ${config.version}`);
+        console.log(`OS Size: ${(this.convertBytesToMB(this.getFolderSize(__dirname + "/.././"))).toFixed(2)} MB`);
+
+        console.log(("OS " + "-".repeat(process.stdout.columns - 3)).bold);
+        this.printDirectoryStructure(__dirname + "/.././");
+
+        console.log(("-".repeat(process.stdout.columns)).bold);
+        console.log(this.printKeybind("^Q", "Start OS") + this.printKeybind("^R", "Create User") + this.printKeybind("^E", "Remove User"));
     }
 };
