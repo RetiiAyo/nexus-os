@@ -15,6 +15,7 @@ rl.input.on("keypress", async (key, data) => {
 
         console.clear();
         console.log("Booting NexusOS..");
+        require("./os/nexsys/boot")();
     }
     else if (key == "R" && type == 1) {
         var accountName;
